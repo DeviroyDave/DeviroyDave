@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Deviroy Dave Fernandez | Software Developer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0b0c10;
+      --surface: #13141a;
+      --surface2: #1c1e27;
+      --accent: #7efff5;
+      --accent2: #f7c59f;
+      --text: #e8eaf0;
+      --muted: #7a7d8c;
+      --border: rgba(255,255,255,0.07);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* ── GLOW BLOBS ── */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.12;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blob-1 { width: 500px; height: 500px; background: var(--accent); top: -100px; left: -150px; }
+    .blob-2 { width: 400px; height: 400px; background: var(--accent2); bottom: -100px; right: -100px; }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.2rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(11,12,16,0.7);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    header {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 80px;
+      position: relative;
+    }
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(126,255,245,0.08);
+      border: 1px solid rgba(126,255,245,0.2);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s ease infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.8rem, 5vw, 4.2rem);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+    .hero-desc {
+      margin-top: 1.5rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 480px;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+    .hero-cta {
+      margin-top: 2.5rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.6rem;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #0b0c10;
+      font-weight: 600;
+    }
+    .btn-primary:hover {
+      background: #5de8de;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(126,255,245,0.25);
+    }
+    .btn-secondary {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      border-color: rgba(126,255,245,0.3);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* ── HERO VISUAL ── */
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 1s 0.4s ease both;
+    }
+    .hero-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 340px;
+      position: relative;
+    }
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(126,255,245,0.3), transparent 60%);
+      z-index: -1;
+    }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .stat { text-align: center; }
+    .stat-number {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+      display: block;
+    }
+    .stat-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .skill-tag {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.75rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      transition: all 0.2s;
+    }
+    .skill-tag:hover { color: var(--accent); border-color: rgba(126,255,245,0.3); }
+
+    /* ── SECTIONS ── */
+    section { padding: 6rem 0; position: relative; z-index: 1; }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 1px;
+      background: var(--accent);
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+    .section-sub {
+      color: var(--muted);
+      max-width: 520px;
+      margin-bottom: 3rem;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0 2rem;
+    }
+
+    /* ── PROJECT GRID ── */
+    .category-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .category-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 3rem;
+    }
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .project-card::after {
+      content: '↗';
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      font-size: 1.1rem;
+      color: var(--muted);
+      transition: all 0.25s;
+    }
+    .project-card:hover {
+      border-color: rgba(126,255,245,0.25);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+    }
+    .project-card:hover::after {
+      color: var(--accent);
+      transform: translate(3px, -3px);
+    }
+    .project-card:hover .project-title { color: var(--accent); }
+    .project-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      margin-bottom: 1.25rem;
+    }
+    .project-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      transition: color 0.2s;
+      padding-right: 1.5rem;
+    }
+    .project-desc {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── CONNECT ── */
+    .connect-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 3.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .connect-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(126,255,245,0.06) 0%, transparent 70%);
+    }
+    .connect-box .section-title { margin-bottom: 0.75rem; }
+    .connect-box p { color: var(--muted); margin-bottom: 2rem; max-width: 460px; margin-left: auto; margin-right: auto; }
+    .connect-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
+    .btn-coffee {
+      background: #FFDD00;
+      color: #0b0c10;
+      font-weight: 600;
+    }
+    .btn-coffee:hover {
+      background: #FFD000;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(255,221,0,0.25);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2.5rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.85rem;
+      position: relative;
+      z-index: 1;
+    }
+    footer span { color: var(--accent); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .hero-visual { display: none; }
+      nav .nav-links { display: none; }
+      .connect-box { padding: 2.5rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Blobs -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <!-- Nav -->
+  <nav>
+    <a href="#" class="nav-logo">Devi<span>.</span>Roy</a>
+    <ul class="nav-links">
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#connect">Connect</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <header>
+    <div class="container">
+      <div class="hero-inner">
+        <div>
+          <div class="hero-badge">Available for Hire</div>
+          <h1>Software<br><em>Developer</em><br>& Builder</h1>
+          <p class="hero-desc">
+            Deviroy Dave Fernandez — crafting clean UI/UX, intuitive business tools, custom software solutions, and professional Excel templates. Remote-ready.
+          </p>
+          <div class="hero-cta">
+            <a href="https://ph.linkedin.com/in/deviroyfernandez" target="_blank" class="btn btn-primary">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              LinkedIn
+            </a>
+            <a href="#projects" class="btn btn-secondary">View Projects ↓</a>
+          </div>
+        </div>
+
+        <!-- Hero Card -->
+        <div class="hero-visual">
+          <div class="hero-card">
+            <div class="stat-row">
+              <div class="stat"><span class="stat-number">10+</span><span class="stat-label">Projects</span></div>
+              <div class="stat"><span class="stat-number">3+</span><span class="stat-label">Years Exp.</span></div>
+              <div class="stat"><span class="stat-number">∞</span><span class="stat-label">Coffee</span></div>
+            </div>
+            <div class="skill-tags">
+              <span class="skill-tag">JavaScript</span>
+              <span class="skill-tag">HTML/CSS</span>
+              <span class="skill-tag">React</span>
+              <span class="skill-tag">Excel</span>
+              <span class="skill-tag">UI/UX</span>
+              <span class="skill-tag">REST APIs</span>
+              <span class="skill-tag">Node.js</span>
+              <span class="skill-tag">Tailwind</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Projects -->
+  <section id="projects">
+    <div class="container">
+      <div class="reveal">
+        <span class="section-label">Work</span>
+        <h2 class="section-title">Featured Projects</h2>
+        <p class="section-sub">A selection of tools, apps, and experiments built for real-world use cases.</p>
+      </div>
+
+      <!-- Business -->
+      <div class="reveal">
+        <div class="category-label">Business & Productivity</div>
+        <div class="projects-grid">
+          <a href="https://demopossystem1.netlify.app/" target="_blank" class="project-card">
+            <div class="project-icon">🛒</div>
+            <div class="project-title">Demo POS System</div>
+            <p class="project-desc">Custom Point of Sale interface designed for high usability and streamlined small business operations.</p>
+          </a>
+          <a href="https://costingapp-df.netlify.app/" target="_blank" class="project-card">
+            <div class="project-icon">💰</div>
+            <div class="project-title">Costing App</div>
+            <p class="project-desc">Financial calculation tool built for efficient and accurate cost tracking.</p>
+          </a>
+          <a href="https://resume-manager--rugdoll123.replit.app" target="_blank" class="project-card">
+            <div class="project-icon">📄</div>
+            <div class="project-title">Resume Manager</div>
+            <p class="project-desc">Utility for managing and organizing professional resumes effectively.</p>
+          </a>
+          <a href="https://field-sense-ai.base44.app" target="_blank" class="project-card">
+            <div class="project-icon">🤖</div>
+            <div class="project-title">Field Sense AI</div>
+            <p class="project-desc">AI-integrated application built on the Base44 platform for intelligent data handling.</p>
+          </a>
+          <a href="https://calculatorhub4work-dev.netlify.app/" target="_blank" class="project-card">
+            <div class="project-icon">🧮</div>
+            <div class="project-title">Calculator Hub</div>
+            <p class="project-desc">A centralized hub providing various work-related calculation tools.</p>
+          </a>
+          <a href="https://time-df.netlify.app/" target="_blank" class="project-card">
+            <div class="project-icon">⏱️</div>
+            <div class="project-title">Time Tracker</div>
+            <p class="project-desc">Utility application focused on tracking and managing time for maximum productivity.</p>
+          </a>
+        </div>
+      </div>
+
+      <!-- Utilities -->
+      <div class="reveal">
+        <div class="category-label">Utilities & Interactive</div>
+        <div class="projects-grid">
+          <a href="https://devi-tools.netlify.app/" target="_blank" class="project-card">
+            <div class="project-icon">🔧</div>
+            <div class="project-title">Devi Tools</div>
+            <p class="project-desc">A curated collection of custom-built developer and productivity tools.</p>
+          </a>
+          <a href="https://devi-chat.netlify.app/" target="_blank" class="project-card">
+            <div class="project-icon">💬</div>
+            <div class="project-title">Devi Chat</div>
+            <p class="project-desc">Real-time messaging application showcasing live web socket capabilities.</p>
+          </a>
+          <a href="https://sudoku-df.netlify.app/" target="_blank" class="project-card">
+            <div class="project-icon">🧩</div>
+            <div class="project-title">Sudoku</div>
+            <p class="project-desc">Interactive browser-based Sudoku game demonstrating logic and puzzle implementation.</p>
+          </a>
+          <a href="https://samplebydeviroyfernandez.netlify.app/" target="_blank" class="project-card">
+            <div class="project-icon">🖼️</div>
+            <div class="project-title">Portfolio Sample</div>
+            <p class="project-desc">A demonstration of modern layout design and frontend development skills.</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Connect -->
+  <section id="connect">
+    <div class="container">
+      <div class="connect-box reveal">
+        <span class="section-label" style="justify-content:center; margin-bottom: 1.25rem;">Let's Work Together</span>
+        <h2 class="section-title">Got a project in mind?</h2>
+        <p>I'm available for freelance and remote opportunities. Whether you need a custom tool, a polished UI, or a business solution — let's build it.</p>
+        <div class="connect-btns">
+          <a href="https://ph.linkedin.com/in/deviroyfernandez" target="_blank" class="btn btn-primary">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            Connect on LinkedIn
+          </a>
+          <a href="https://buymeacoffee.com/deviroyfernandez" target="_blank" class="btn btn-coffee">
+            ☕ Buy me a coffee
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 <span>Deviroy Dave Fernandez</span>. All rights reserved. · Available for freelance & remote opportunities.</p>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Parallax blobs on mouse move
+    document.addEventListener('mousemove', e => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 30;
+      const y = (e.clientY / window.innerHeight - 0.5) * 30;
+      document.querySelector('.blob-1').style.transform = `translate(${x}px, ${y}px)`;
+      document.querySelector('.blob-2').style.transform = `translate(${-x}px, ${-y}px)`;
+    });
+  </script>
+</body>
+</html>
